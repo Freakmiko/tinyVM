@@ -1,7 +1,12 @@
 #include <iostream>
 
+#include "VirtualMachine.h"
+
 int main(int argc, char* argv[])
 {
-	std::cout << "Test" << std::endl;
+	VirtualMachine vm;
+	vm.start();
+	int c;
+	std::cin >> c;
 	return 0;
 }
