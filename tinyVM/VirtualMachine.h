@@ -29,6 +29,7 @@ private:
 	unsigned short registers[16];
 	unsigned short memory[4096];
 	std::stack<unsigned short> registerStack;
+	std::stack<unsigned short> subroutineStack;
 
 	bool cntProg;
 };
