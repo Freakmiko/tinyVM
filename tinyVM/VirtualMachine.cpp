@@ -128,6 +128,11 @@ void VirtualMachine::run()
 		std::cout << "JMP command found" << std::endl;
 		programCounter = value;
 		break;
+	case JIZ:
+		std::cout << "JIZ command found" << std::endl;
+		if (registers[0] == 0) 
+			programCounter = value;
+		break;
 	default:
 		std::cout << "Invalid command!" << std::endl;
 		cntProg = false;
