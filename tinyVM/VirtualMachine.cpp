@@ -256,6 +256,56 @@ void VirtualMachine::readProgram(const std::string filePath)
 			command += (rx << 4) + (ry << 8);
 			memory[programLine++] = command;
 		}
+		else if (subString == "MUL")
+		{
+			int rx;
+			int ry;
+			char comma;
+
+			command = MUL;
+			currLinStream >> rx;
+			std::cout << "RX: " << rx << std::endl;
+			currLinStream >> comma;
+			currLinStream >> ry;
+			std::cout << "RY: " << ry << std::endl;
+			command += (rx << 4) + (ry << 8);
+			memory[programLine++] = command;
+		}
+		else if (subString == "DIV")
+		{
+			int rx;
+			int ry;
+			char comma;
+
+			command = DIV;
+			currLinStream >> rx;
+			std::cout << "RX: " << rx << std::endl;
+			currLinStream >> comma;
+			currLinStream >> ry;
+			std::cout << "RY: " << ry << std::endl;
+			command += (rx << 4) + (ry << 8);
+			memory[programLine++] = command;
+		}
+		else if (subString == "PUSH")
+		{
+			int rx;
+
+			command = PUSH;
+			currLinStream >> rx;
+			std::cout << "RX: " << rx << std::endl;
+			command += (rx << 4);
+			memory[programLine++] = command;
+		}
+		else if (subString == "POP")
+		{
+			int rx;
+
+			command = POP;
+			currLinStream >> rx;
+			std::cout << "RX: " << rx << std::endl;
+			command += (rx << 4);
+			memory[programLine++] = command;
+		}
 		else if (subString == "RTS")
 		{
 			command = RTS;
