@@ -49,8 +49,8 @@ void VirtualMachine::run()
 		break;
 	case LOAD:
 		std::cout << "LOAD command found" << std::endl;
-		registers[0] = memory[value];
-		std::cout << "Register 0 loaded the value: " << memory[value] << std::endl;
+		registers[0] = value;
+		std::cout << "Register 0 loaded the value: " << value << std::endl;
 		programCounter++;
 		break;
 	case MOV:
