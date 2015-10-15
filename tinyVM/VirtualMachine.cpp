@@ -148,6 +148,16 @@ void VirtualMachine::run()
 		subroutineStack.push(++programCounter);
 		programCounter = value;
 		break;
+	case RTS:
+		std::cout << "RTS command found" << std::endl;
+		if (subroutineStack.empty()) {
+			cntProg = false;
+		}
+		else {
+			programCounter = subroutineStack.top();
+			subroutineStack.pop();
+		}
+		break;
 	default:
 		std::cout << "Invalid command!" << std::endl;
 		cntProg = false;
