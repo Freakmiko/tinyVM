@@ -124,6 +124,9 @@
   <ItemGroup>
     <ClInclude Include="VirtualMachine.h" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="test.vm" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

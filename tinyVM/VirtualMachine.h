@@ -21,6 +21,7 @@ class VirtualMachine
 public:
 	VirtualMachine();
 	~VirtualMachine();
+	void readProgram(const std::string filePath);
 	void start();
 private:
 	void run();

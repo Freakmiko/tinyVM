@@ -1,9 +1,12 @@
 #include "VirtualMachine.h"
 #include <iostream>
+#include <fstream>
+#include <string>
+#include <sstream>
 
 VirtualMachine::VirtualMachine() : programCounter(0), cntProg(true)
 {
-	memory[0] = NOP;
+	/*memory[0] = NOP;
 	memory[1] = LOAD + (1283 << 4);
 	memory[2] = MOV + (1 << 4) + (12 << 8);
 	memory[3] = ADD + (1 << 4) + (1 << 8);
@@ -18,7 +21,7 @@ VirtualMachine::VirtualMachine() : programCounter(0), cntProg(true)
 
 	memory[1283] = 69;
 	registers[12] = 420;
-	registers[2] = 2;
+	registers[2] = 2;*/
 }
 
 
@@ -41,7 +44,7 @@ void VirtualMachine::run()
 	unsigned short toMem = (opCode >> 13) & 0xF;
 	unsigned short value = (opCode >> 4) & 0xFFF;
 
-	switch(command)
+	switch (command)
 	{
 	case NOP:
 		std::cout << "NOP command found" << std::endl;
@@ -49,39 +52,39 @@ void VirtualMachine::run()
 		break;
 	case LOAD:
 		std::cout << "LOAD command found" << std::endl;
-		registers[0] = memory[value];
-		std::cout << "Register 0 loaded the value: " << memory[value] << std::endl;
+		registers[0] = value;
+		std::cout << "Register 0 loaded the value: " << value << std::endl;
 		programCounter++;
 		break;
 	case MOV:
 		std::cout << "MOV command found" << std::endl;
 		// TODO: Shorten this... maybe?
-		if(fromMem == 0 && toMem == 0)
+		if (fromMem == 0 && toMem == 0)
 		{
 			registers[idx] = registers[idy];
-			std::cout << "Register[" << idx 
-				<< "] now has the value from Register[" 
+			std::cout << "Register[" << idx
+				<< "] now has the value from Register["
 				<< idy << "](" << registers[idy] << ")" << std::endl;
 		}
-		else if(fromMem == 0 && toMem == 1)
+		else if (fromMem == 0 && toMem == 1)
 		{
 			memory[registers[idx]] = registers[idy];
 			std::cout << "Memory[" << registers[idx]
-				<< "] now has the value from Register[" 
+				<< "] now has the value from Register["
 				<< idy << "](" << registers[idy] << ")" << std::endl;
 		}
-		else if(fromMem == 1 && toMem == 0)
+		else if (fromMem == 1 && toMem == 0)
 		{
 			registers[idx] = memory[registers[idy]];
-			std::cout << "Register[" << idx 
-				<< "] now has the value from Memory[" 
+			std::cout << "Register[" << idx
+				<< "] now has the value from Memory["
 				<< registers[idy] << "](" << memory[registers[idy]] << ")" << std::endl;
-		} 
-		else if(fromMem == 1 && toMem == 1)
+		}
+		else if (fromMem == 1 && toMem == 1)
 		{
 			memory[registers[idx]] = memory[registers[idy]];
 			std::cout << "Memory[" << memory[registers[idx]]
-				<< "] now has the value from Memory[" 
+				<< "] now has the value from Memory["
 				<< registers[idy] << "](" << memory[registers[idy]] << ")" << std::endl;
 		}
 		programCounter++;
@@ -131,7 +134,7 @@ void VirtualMachine::run()
 		break;
 	case JIZ:
 		std::cout << "JIZ command found" << std::endl;
-		if (registers[0] == 0) 
+		if (registers[0] == 0)
 			programCounter = value;
 		else
 			programCounter++;
@@ -167,4 +170,98 @@ void VirtualMachine::run()
 
 VirtualMachine::~VirtualMachine()
 {
+}
+
+void VirtualMachine::readProgram(const std::string filePath)
+{
+	std::ifstream program(filePath);
+	if (program.fail())
+	{
+		std::cout << "Could not open file!";
+		exit(EXIT_FAILURE);
+	}
+
+	std::string currentLine("");
+
+	unsigned short command = 0;
+	char buffer[255];
+	int programLine = 0;
+
+	while (!program.eof())
+	{
+		std::getline(program, currentLine);
+
+		std::string subString;
+		std::stringstream currLinStream(currentLine);
+		std::getline(currLinStream, subString, ' ');
+		//currLinStream.read(buffer, subString.length());
+		std::cout << "Command: " << subString << std::endl;
+
+		if (subString == "NOP")
+		{
+			command = NOP;
+			memory[programLine++] = command;
+		}
+		else if (subString == "LOAD")
+		{
+			command = LOAD;
+			unsigned short value;
+			currLinStream >> value;
+			std::cout << "Value: " << value << std::endl;
+			command += (value << 4);
+			memory[programLine++] = command;
+		}
+		else if (subString == "MOV") 
+		{
+			int rx;
+			int ry;
+			char comma;
+
+			command = MOV;
+			currLinStream >> rx;
+			std::cout << "RX: " << rx << std::endl;
+			currLinStream >> comma;
+			currLinStream >> ry;
+			std::cout << "RY: " << ry << std::endl;
+			command += (rx << 4) + (ry << 8);
+			memory[programLine++] = command;
+		}
+		else if (subString == "ADD")
+		{
+			int rx;
+			int ry;
+			char comma;
+
+			command = ADD;
+			currLinStream >> rx;
+			std::cout << "RX: " << rx << std::endl;
+			currLinStream >> comma;
+			currLinStream >> ry;
+			std::cout << "RY: " << ry << std::endl;
+			command += (rx << 4) + (ry << 8);
+			memory[programLine++] = command;
+		}
+		else if (subString == "SUB")
+		{
+			int rx;
+			int ry;
+			char comma;
+
+			command = SUB;
+			currLinStream >> rx;
+			std::cout << "RX: " << rx << std::endl;
+			currLinStream >> comma;
+			currLinStream >> ry;
+			std::cout << "RY: " << ry << std::endl;
+			command += (rx << 4) + (ry << 8);
+			memory[programLine++] = command;
+		}
+		else if (subString == "RTS")
+		{
+			command = RTS;
+			memory[programLine++] = command;
+		}
+	}
+
+	program.close();
 }
