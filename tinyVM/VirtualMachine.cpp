@@ -113,14 +113,14 @@ void VirtualMachine::run()
 	case PUSH:
 		// TODO: Not sure if Rx is a parameter!
 		std::cout << "PUSH command found" << std::endl;
-		stack.push(registers[idx]);
+		registerStack.push(registers[idx]);
 		std::cout << "Register[" << idx << "] pushed onto stack" << std::endl;
 		programCounter++;
 		break;
 	case POP:
 		// TODO: Not sure if Rx is a parameter!
 		std::cout << "POP command found" << std::endl;
-		registers[idx] = stack.top();
+		registers[idx] = registerStack.top();
 		std::cout << "Popped top from stack into Register[" << idx << "](" << registers[idx] << ")" << std::endl;
 		programCounter++;
 		break;
