@@ -142,6 +142,11 @@ void VirtualMachine::run()
 		else
 			programCounter++;
 		break;
+	case JSR:
+		std::cout << "JSR command found" << std::endl;
+		subroutineStack.push(++programCounter);
+		programCounter = value;
+		break;
 	default:
 		std::cout << "Invalid command!" << std::endl;
 		cntProg = false;
