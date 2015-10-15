@@ -132,6 +132,7 @@ void VirtualMachine::run()
 		std::cout << "Invalid command!" << std::endl;
 		cntProg = false;
 	}
+	std::cout << std::endl;
 }
 
 VirtualMachine::~VirtualMachine()
