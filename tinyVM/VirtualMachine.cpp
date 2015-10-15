@@ -121,6 +121,7 @@ void VirtualMachine::run()
 		// TODO: Not sure if Rx is a parameter!
 		std::cout << "POP command found" << std::endl;
 		registers[idx] = registerStack.top();
+		registerStack.pop();
 		std::cout << "Popped top from stack into Register[" << idx << "](" << registers[idx] << ")" << std::endl;
 		programCounter++;
 		break;
