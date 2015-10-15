@@ -135,6 +135,13 @@ void VirtualMachine::run()
 		else
 			programCounter++;
 		break;
+	case JIH:
+		std::cout << "JIH command found" << std::endl;
+		if (registers[0] > 0)
+			programCounter = value;
+		else
+			programCounter++;
+		break;
 	default:
 		std::cout << "Invalid command!" << std::endl;
 		cntProg = false;
