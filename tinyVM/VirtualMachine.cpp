@@ -197,7 +197,7 @@ void VirtualMachine::readProgram(const std::string filePath)
 		//currLinStream.read(buffer, subString.length());
 		std::cout << "Command: " << subString << std::endl;
 
-		if (subString == "NOP")
+		if (subString == "NOP" || subString.find_first_not_of(' ') == std::string::npos)
 		{
 			command = NOP;
 			memory[programLine++] = command;

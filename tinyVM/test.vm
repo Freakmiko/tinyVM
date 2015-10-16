@@ -1,4 +1,7 @@
 NOP
+
+
+
 LOAD 69
 MOV 1, 0 ; this moves 69 into register[1]
 ADD 2, 1
