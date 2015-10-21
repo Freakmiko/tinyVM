@@ -3,18 +3,18 @@
 
 const unsigned short NOP = 0;
 const unsigned short LOAD = 1;
-const unsigned short MOV = 3;
-const unsigned short ADD = 4;
-const unsigned short SUB = 5;
-const unsigned short MUL = 6;
-const unsigned short DIV = 7;
-const unsigned short PUSH = 8;
-const unsigned short POP = 9;
-const unsigned short JMP = 10;
-const unsigned short JIZ = 11;
-const unsigned short JIH = 12;
-const unsigned short JSR = 13;
-const unsigned short RTS = 14;
+const unsigned short MOV = 2;
+const unsigned short ADD = 3;
+const unsigned short SUB = 4;
+const unsigned short MUL = 5;
+const unsigned short DIV = 6;
+const unsigned short PUSH = 7;
+const unsigned short POP = 8;
+const unsigned short JMP = 9;
+const unsigned short JIZ = 10;
+const unsigned short JIH = 11;
+const unsigned short JSR = 12;
+const unsigned short RTS = 13;
 
 class VirtualMachine
 {
