@@ -7,7 +7,7 @@
 VirtualMachine::VirtualMachine() : programCounter(0), cntProg(true)
 {
 	/*memory[0] = NOP;
-	memory[1] = LOAD + (1283 << 4);
+	memory[1] = LOAD + (69 << 4);
 	memory[2] = MOV + (1 << 4) + (12 << 8);
 	memory[3] = ADD + (1 << 4) + (1 << 8);
 	memory[4] = SUB + (1 << 4) + (12 << 8);
@@ -16,10 +16,9 @@ VirtualMachine::VirtualMachine() : programCounter(0), cntProg(true)
 	memory[7] = PUSH + (1 << 4);
 	memory[8] = POP + (2 << 4);
 	memory[9] = JMP + (420 << 4);
-	memory[420] = LOAD + (1283 << 4);
+	memory[420] = LOAD + (1337 << 4);
 	memory[15] = 15;
 
-	memory[1283] = 69;
 	registers[12] = 420;
 	registers[2] = 2;*/
 }
@@ -40,8 +39,8 @@ void VirtualMachine::run()
 	unsigned short command = opCode & 0xF;
 	unsigned short idx = (opCode >> 4) & 0xF;
 	unsigned short idy = (opCode >> 8) & 0xF;
-	unsigned short fromMem = (opCode >> 12) & 0xF;
-	unsigned short toMem = (opCode >> 13) & 0xF;
+	unsigned short fromMem = (opCode >> 12) & 0x1;
+	unsigned short toMem = (opCode >> 13) & 0x1;
 	unsigned short value = (opCode >> 4) & 0xFFF;
 
 	switch (command)
@@ -184,17 +183,45 @@ void VirtualMachine::readProgram(const std::string filePath)
 	std::string currentLine("");
 
 	unsigned short command = 0;
-	char buffer[255];
 	int programLine = 0;
+	unsigned short rx = 0;
+	unsigned short ry = 0;
+	unsigned short value = 0;
 
 	while (!program.eof())
 	{
+		command = 0;
+		rx = 0;
+		ry = 0;
+		value = 0;
+
 		std::getline(program, currentLine);
+
+		// read the from-mem
+		std::size_t found = currentLine.find(",(");
+		if (found != std::string::npos)
+		{
+			std::cout << "Found a (" << std::endl;
+			currentLine.replace(found + 1, 1, "");
+			found = currentLine.find(")");
+			currentLine.replace(found, 1, "");
+			command += 1 << (12);
+		}
+		
+		// read the to-mem
+		found = currentLine.find("(");
+		if (found != std::string::npos)
+		{
+			std::cout << "Found a (" << std::endl;
+			currentLine.replace(found, 1, "");
+			found = currentLine.find(")");
+			currentLine.replace(found, 1, "");
+			command += 1 << (13);
+		}
 
 		std::string subString;
 		std::stringstream currLinStream(currentLine);
 		std::getline(currLinStream, subString, ' ');
-		//currLinStream.read(buffer, subString.length());
 		std::cout << "Command: " << subString << std::endl;
 
 		if (subString == "NOP" || subString.find_first_not_of(' ') == std::string::npos)
@@ -205,19 +232,16 @@ void VirtualMachine::readProgram(const std::string filePath)
 		else if (subString == "LOAD")
 		{
 			command = LOAD;
-			unsigned short value;
 			currLinStream >> value;
 			std::cout << "Value: " << value << std::endl;
 			command += (value << 4);
 			memory[programLine++] = command;
 		}
-		else if (subString == "MOV") 
+		else if (subString == "MOV")
 		{
-			int rx;
-			int ry;
 			char comma;
 
-			command = MOV;
+			command += MOV;
 			currLinStream >> rx;
 			std::cout << "RX: " << rx << std::endl;
 			currLinStream >> comma;
@@ -228,8 +252,6 @@ void VirtualMachine::readProgram(const std::string filePath)
 		}
 		else if (subString == "ADD")
 		{
-			int rx;
-			int ry;
 			char comma;
 
 			command = ADD;
@@ -243,8 +265,6 @@ void VirtualMachine::readProgram(const std::string filePath)
 		}
 		else if (subString == "SUB")
 		{
-			int rx;
-			int ry;
 			char comma;
 
 			command = SUB;
@@ -258,8 +278,6 @@ void VirtualMachine::readProgram(const std::string filePath)
 		}
 		else if (subString == "MUL")
 		{
-			int rx;
-			int ry;
 			char comma;
 
 			command = MUL;
@@ -273,8 +291,6 @@ void VirtualMachine::readProgram(const std::string filePath)
 		}
 		else if (subString == "DIV")
 		{
-			int rx;
-			int ry;
 			char comma;
 
 			command = DIV;
@@ -288,8 +304,6 @@ void VirtualMachine::readProgram(const std::string filePath)
 		}
 		else if (subString == "PUSH")
 		{
-			int rx;
-
 			command = PUSH;
 			currLinStream >> rx;
 			std::cout << "RX: " << rx << std::endl;
@@ -298,12 +312,42 @@ void VirtualMachine::readProgram(const std::string filePath)
 		}
 		else if (subString == "POP")
 		{
-			int rx;
-
 			command = POP;
 			currLinStream >> rx;
 			std::cout << "RX: " << rx << std::endl;
 			command += (rx << 4);
+			memory[programLine++] = command;
+		}
+		else if (subString == "JMP")
+		{
+			command = JMP;
+			currLinStream >> value;
+			std::cout << "Value: " << value << std::endl;
+			command += (value << 4);
+			memory[programLine++] = command;
+		}
+		else if (subString == "JIZ")
+		{
+			command = JIZ;
+			currLinStream >> value;
+			std::cout << "Value: " << value << std::endl;
+			command += (value << 4);
+			memory[programLine++] = command;
+		}
+		else if (subString == "JIH")
+		{
+			command = JIH;
+			currLinStream >> value;
+			std::cout << "Value: " << value << std::endl;
+			command += (value << 4);
+			memory[programLine++] = command;
+		}
+		else if (subString == "JSR")
+		{
+			command = JSR;
+			currLinStream >> value;
+			std::cout << "Value: " << value << std::endl;
+			command += (value << 4);
 			memory[programLine++] = command;
 		}
 		else if (subString == "RTS")
