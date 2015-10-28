@@ -1,18 +1,21 @@
-NOP
 
 
 
-LOAD 69
-MOV 1, 0 ; this moves 69 into register[1]
-ADD 2, 1
-ADD 2, 1
-SUB 2, 1
-LOAD 2
-MUL 2, 0
-DIV 2, 0
+POP 1
+MOV 0, 1
+JIZ 10
 
-PUSH 2
-POP 3
-SUB 3, 1
+MOV 2, 0
+LOAD 1
+SUB 2, 0
+MOV 0, 2
+
+
+
+
+LOAD 0
+POP 0
+RTS
+
 
 RTS

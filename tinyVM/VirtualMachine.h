@@ -1,5 +1,6 @@
 #pragma once
 #include <stack>
+#include <string>
 
 const unsigned short NOP = 0;
 const unsigned short LOAD = 1;
@@ -21,7 +22,7 @@ class VirtualMachine
 public:
 	VirtualMachine();
 	~VirtualMachine();
-	void readProgram(const std::string filePath);
+	void readProgram(const std::string& filePath);
 	void start();
 private:
 	void run();
@@ -33,5 +34,7 @@ private:
 	std::stack<unsigned short> subroutineStack;
 
 	bool cntProg;
+
+	short ignoreWhitespace(const char *currentLine, short lineCounter) const;
 };
 
