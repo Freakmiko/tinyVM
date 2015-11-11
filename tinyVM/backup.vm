@@ -1,0 +1,39 @@
+int fib(int n) {
+	if (n == 0)
+		return 0;
+	if (n == 1)
+		return 1;
+	else
+		return fib(n-1) + fib(n-2);
+}
+
+
+[FIB]
+POP 1
+MOVE 0, 1
+JIZ [Zero]
+LOAD 1
+SUB 1, 0
+MOVE 0, 1
+JIZ [ONE]
+
+MOVE 2, 1
+LOAD 1
+SUB 2, 0
+PUSH 2
+PUSH 1
+JSR [FIB]
+POP 6
+JSR [FIB]
+POP 7
+ADD 6, 7
+PUSH 6
+
+
+[Zero]
+PUSH 1
+RTS
+
+[ONE]
+PUSH 1
+RTS

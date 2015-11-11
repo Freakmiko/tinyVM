@@ -36,5 +36,7 @@ private:
 	std::stack<int> subroutineStack;
 
 	bool cntProg;
+
+	int shiftCounter;
 };
 

@@ -3,7 +3,7 @@
 #include <fstream>
 #include <sstream>
 
-VirtualMachine::VirtualMachine() : programCounter(0), cntProg(true)
+VirtualMachine::VirtualMachine() : programCounter(0), cntProg(true), shiftCounter(0)
 {
 	for(int i = 0; i < 4096; ++i) {
 		memory[i] = 0;
@@ -47,6 +47,10 @@ void VirtualMachine::run()
 	unsigned short fromMem = (opCode >> 12) & 0x1;
 	unsigned short toMem = (opCode >> 13) & 0x1;
 	unsigned short value = (opCode >> 4) & 0xFFF;
+
+    for(int i = 0; i < shiftCounter; ++i) {
+        std::cout << "\t";
+    }
 
 	switch (command)
 	{
@@ -151,9 +155,11 @@ void VirtualMachine::run()
 		std::cout << "JSR command found" << std::endl;
 		subroutineStack.push(++programCounter);
 		programCounter = value;
+            shiftCounter++;
 		break;
 	case RTS:
 		std::cout << "RTS command found" << std::endl;
+            shiftCounter--;
 		if (subroutineStack.empty()) {
 			cntProg = false;
             programCounter++;
