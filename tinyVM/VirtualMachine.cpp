@@ -2,25 +2,17 @@
 #include <iostream>
 #include <fstream>
 #include <sstream>
-#include <string.h>
 
 VirtualMachine::VirtualMachine() : programCounter(0), cntProg(true)
 {
-	/*memory[0] = NOP;
-	memory[1] = LOAD + (69 << 4);
-	memory[2] = MOV + (1 << 4) + (12 << 8);
-	memory[3] = ADD + (1 << 4) + (1 << 8);
-	memory[4] = SUB + (1 << 4) + (12 << 8);
-	memory[5] = MUL + (1 << 4) + (2 << 8);
-	memory[6] = DIV + (1 << 4) + (2 << 8);
-	memory[7] = PUSH + (1 << 4);
-	memory[8] = POP + (2 << 4);
-	memory[9] = JMP + (420 << 4);
-	memory[420] = LOAD + (1337 << 4);
-	memory[15] = 15;
+	for(int i = 0; i < 4096; ++i) {
+		memory[i] = 0;
+		profiler[i] = 0;
 
-	registers[12] = 420;
-	registers[2] = 2;*/
+		if(i < 16) {
+			registers[i] = 0;
+		}
+	}
 }
 
 
@@ -29,7 +21,20 @@ void VirtualMachine::start()
 	do
 	{
 		run();
+        profiler[programCounter]++;
 	} while (cntProg);
+
+    // Profiler section
+	double sum = 0;
+	for (int i = 0; i < 4096; ++i) {
+		sum += profiler[i];
+	}
+
+	for (int i = 0; i < 4096; ++i) {
+		if(profiler[i] != 0) {
+			std::cout << "[" << i << "]: " << profiler[i] / sum * 100 << "%" << std::endl;
+		}
+	}
 }
 
 void VirtualMachine::run()
@@ -57,7 +62,6 @@ void VirtualMachine::run()
 		break;
 	case MOV:
 		std::cout << "MOV command found" << std::endl;
-		// TODO: Shorten this... maybe?
 		if (fromMem == 0 && toMem == 0)
 		{
 			registers[idx] = registers[idy];
@@ -113,14 +117,12 @@ void VirtualMachine::run()
 		programCounter++;
 		break;
 	case PUSH:
-		// TODO: Not sure if Rx is a parameter!
 		std::cout << "PUSH command found" << std::endl;
 		registerStack.push(registers[idx]);
 		std::cout << "Register[" << idx << "] pushed onto stack" << std::endl;
 		programCounter++;
 		break;
 	case POP:
-		// TODO: Not sure if Rx is a parameter!
 		std::cout << "POP command found" << std::endl;
 		registers[idx] = registerStack.top();
 		registerStack.pop();
@@ -154,6 +156,7 @@ void VirtualMachine::run()
 		std::cout << "RTS command found" << std::endl;
 		if (subroutineStack.empty()) {
 			cntProg = false;
+            programCounter++;
 		}
 		else {
 			programCounter = subroutineStack.top();
@@ -171,72 +174,6 @@ VirtualMachine::~VirtualMachine()
 {
 }
 
-//void VirtualMachine::readProgram(const std::string& filePath) {
-//    std::ifstream program(filePath);
-//    if(program.fail()) {
-//        std::cout << "Could not open file!";
-//        exit(EXIT_FAILURE);
-//    }
-//
-//    char currentLine[256];
-//    char command[5];
-//    char value[5];
-//    int lineCounter = 0;
-//
-//    while(!program.eof()) {
-//        short currentLineCounter = 0;
-//        short commandCounter = 0;
-//        short valueCounter = 0;
-//
-//        program.getline(currentLine, 256);
-//
-//        currentLineCounter = ignoreWhitespace(currentLine, currentLineCounter);
-//
-//        // read command
-//        while (commandCounter < 5 && currentLineCounter < 256 && currentLine[currentLineCounter] != ' ') {
-//            if (currentLine[currentLineCounter] == ';')
-//                currentLineCounter = 256;
-//            else
-//                command[commandCounter++] = currentLine[currentLineCounter++];
-//        }
-//
-//        command[commandCounter] = '\0';
-//
-//        currentLineCounter = ignoreWhitespace(currentLine, currentLineCounter);
-//
-//        std::cout << command << std::endl;
-//
-//        if(!strcmp(command, "NOP") || !strcmp(command, "")) {
-//            memory[lineCounter++] = NOP;
-//        } else if (!strcmp(command, "LOAD")) {
-//            memory[lineCounter] = LOAD;
-//
-//            while(valueCounter < 5 && currentLineCounter < 256 && currentLine[currentLineCounter] != ' ') {
-//                value[valueCounter++] = currentLine[currentLineCounter++];
-//            }
-//
-//            value[valueCounter] = '\0';
-//
-//            std::cout << std::atoi(value) << std::endl;
-//            memory[lineCounter++] += (std::atoi(value) << 4);
-//
-//        }
-//    }
-//
-//    memory[lineCounter] = RTS;
-//
-//}
-
-short VirtualMachine::ignoreWhitespace(const char *currentLine, short lineCounter) const {// ignore whitespaces
-    while(lineCounter < 256 && currentLine[lineCounter] == ' ') {
-        if(currentLine[lineCounter] == ';')
-            lineCounter = 256;
-        else
-            lineCounter++;
-    }
-    return lineCounter;
-}
-
 void VirtualMachine::readProgram(const std::string& filePath)
 {
 	std::ifstream program(filePath);
@@ -245,6 +182,7 @@ void VirtualMachine::readProgram(const std::string& filePath)
 		std::cout << "Could not open file!";
 		exit(EXIT_FAILURE);
 	}
+
 
 	std::string currentLine("");
 

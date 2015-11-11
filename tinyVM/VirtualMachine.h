@@ -27,14 +27,14 @@ public:
 private:
 	void run();
 
+private:
 	int programCounter;
 	unsigned short registers[16];
 	unsigned short memory[4096];
+	int profiler[4096];
 	std::stack<unsigned short> registerStack;
-	std::stack<unsigned short> subroutineStack;
+	std::stack<int> subroutineStack;
 
 	bool cntProg;
-
-	short ignoreWhitespace(const char *currentLine, short lineCounter) const;
 };
 

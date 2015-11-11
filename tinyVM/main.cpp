@@ -7,7 +7,5 @@ int main(int argc, char* argv[])
 	VirtualMachine vm;
 	vm.readProgram("test.vm");
 	vm.start();
-	int c;
-	std::cin >> c;
 	return 0;
 }
