@@ -48,117 +48,119 @@ void VirtualMachine::run()
 	unsigned short toMem = (opCode >> 13) & 0x1;
 	unsigned short value = (opCode >> 4) & 0xFFF;
 
+    std::string shiftString;
     for(int i = 0; i < shiftCounter; ++i) {
-        std::cout << "\t";
+        shiftString += "\t";
     }
+
 
 	switch (command)
 	{
 	case NOP:
-		std::cout << "NOP command found" << std::endl;
+		std::cout << shiftString << "NOP command found" << std::endl;
 		programCounter++;
 		break;
 	case LOAD:
-		std::cout << "LOAD command found" << std::endl;
+		std::cout << shiftString << "LOAD command found" << std::endl;
 		registers[0] = value;
-		std::cout << "Register 0 loaded the value: " << value << std::endl;
+		std::cout << shiftString << "Register 0 loaded the value: " << value << std::endl;
 		programCounter++;
 		break;
 	case MOV:
-		std::cout << "MOV command found" << std::endl;
+		std::cout << shiftString << "MOV command found" << std::endl;
 		if (fromMem == 0 && toMem == 0)
 		{
 			registers[idx] = registers[idy];
-			std::cout << "Register[" << idx
+			std::cout << shiftString << "Register[" << idx
 				<< "] now has the value from Register["
 				<< idy << "](" << registers[idy] << ")" << std::endl;
 		}
 		else if (fromMem == 0 && toMem == 1)
 		{
 			memory[registers[idx]] = registers[idy];
-			std::cout << "Memory[" << registers[idx]
+			std::cout << shiftString << "Memory[" << registers[idx]
 				<< "] now has the value from Register["
 				<< idy << "](" << registers[idy] << ")" << std::endl;
 		}
 		else if (fromMem == 1 && toMem == 0)
 		{
 			registers[idx] = memory[registers[idy]];
-			std::cout << "Register[" << idx
+			std::cout << shiftString << "Register[" << idx
 				<< "] now has the value from Memory["
 				<< registers[idy] << "](" << memory[registers[idy]] << ")" << std::endl;
 		}
 		else if (fromMem == 1 && toMem == 1)
 		{
 			memory[registers[idx]] = memory[registers[idy]];
-			std::cout << "Memory[" << memory[registers[idx]]
+			std::cout << shiftString << "Memory[" << memory[registers[idx]]
 				<< "] now has the value from Memory["
 				<< registers[idy] << "](" << memory[registers[idy]] << ")" << std::endl;
 		}
 		programCounter++;
 		break;
 	case ADD:
-		std::cout << "ADD command found" << std::endl;
+		std::cout << shiftString << "ADD command found" << std::endl;
 		registers[idx] += registers[idy];
-		std::cout << "Register[" << idx << "] += Register[" << idy << "] (" << registers[idx] << ")" << std::endl;
+		std::cout << shiftString << "Register[" << idx << "] += Register[" << idy << "] (" << registers[idx] << ")" << std::endl;
 		programCounter++;
 		break;
 	case SUB:
-		std::cout << "SUB command found" << std::endl;
+		std::cout << shiftString << "SUB command found" << std::endl;
 		registers[idx] -= registers[idy];
-		std::cout << "Register[" << idx << "] -= Register[" << idy << "] (" << registers[idx] << ")" << std::endl;
+		std::cout << shiftString << "Register[" << idx << "] -= Register[" << idy << "] (" << registers[idx] << ")" << std::endl;
 		programCounter++;
 		break;
 	case MUL:
-		std::cout << "MUL command found" << std::endl;
+		std::cout << shiftString << "MUL command found" << std::endl;
 		registers[idx] *= registers[idy];
-		std::cout << "Register[" << idx << "] *= Register[" << idy << "] (" << registers[idx] << ")" << std::endl;
+		std::cout << shiftString << "Register[" << idx << "] *= Register[" << idy << "] (" << registers[idx] << ")" << std::endl;
 		programCounter++;
 		break;
 	case DIV:
-		std::cout << "DIV command found" << std::endl;
+		std::cout << shiftString << "DIV command found" << std::endl;
 		registers[idx] /= registers[idy];
-		std::cout << "Register[" << idx << "] /= Register[" << idy << "] (" << registers[idx] << ")" << std::endl;
+		std::cout << shiftString << "Register[" << idx << "] /= Register[" << idy << "] (" << registers[idx] << ")" << std::endl;
 		programCounter++;
 		break;
 	case PUSH:
-		std::cout << "PUSH command found" << std::endl;
+		std::cout << shiftString << "PUSH command found" << std::endl;
 		registerStack.push(registers[idx]);
-		std::cout << "Register[" << idx << "] pushed onto stack" << std::endl;
+		std::cout << shiftString << "Register[" << idx << "] pushed onto stack" << std::endl;
 		programCounter++;
 		break;
 	case POP:
-		std::cout << "POP command found" << std::endl;
+		std::cout << shiftString << "POP command found" << std::endl;
 		registers[idx] = registerStack.top();
 		registerStack.pop();
-		std::cout << "Popped top from stack into Register[" << idx << "](" << registers[idx] << ")" << std::endl;
+		std::cout << shiftString << "Popped top from stack into Register[" << idx << "](" << registers[idx] << ")" << std::endl;
 		programCounter++;
 		break;
 	case JMP:
-		std::cout << "JMP command found" << std::endl;
+		std::cout << shiftString << "JMP command found" << std::endl;
 		programCounter = value;
 		break;
 	case JIZ:
-		std::cout << "JIZ command found" << std::endl;
+		std::cout << shiftString << "JIZ command found" << std::endl;
 		if (registers[0] == 0)
 			programCounter = value;
 		else
 			programCounter++;
 		break;
 	case JIH:
-		std::cout << "JIH command found" << std::endl;
+		std::cout << shiftString << "JIH command found" << std::endl;
 		if (registers[0] > 0)
 			programCounter = value;
 		else
 			programCounter++;
 		break;
 	case JSR:
-		std::cout << "JSR command found" << std::endl;
+		std::cout << shiftString << "JSR command found" << std::endl;
 		subroutineStack.push(++programCounter);
 		programCounter = value;
             shiftCounter++;
 		break;
 	case RTS:
-		std::cout << "RTS command found" << std::endl;
+		std::cout << shiftString << "RTS command found" << std::endl;
             shiftCounter--;
 		if (subroutineStack.empty()) {
 			cntProg = false;
@@ -170,10 +172,10 @@ void VirtualMachine::run()
 		}
 		break;
 	default:
-		std::cout << "Invalid command!" << std::endl;
+		std::cout << shiftString << "Invalid command!" << std::endl;
 		cntProg = false;
 	}
-	std::cout << std::endl;
+	std::cout << shiftString << std::endl;
 }
 
 VirtualMachine::~VirtualMachine()
