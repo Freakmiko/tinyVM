@@ -1,3 +1,25 @@
+LOAD 1000 ; The position in memory where the fibonacci will be written
+MOV 12, 0
+LOAD 20 ; The highest fibonacci number
+MOV 13, 0
+LOAD 0 ; Our current fibonacci number
+MOV 14, 0
+
+PUSH 14
+JSR 28 ; FIB
+POP 14
+MOV (12), 14
+MOV 15, 14
+SUB 15, 13
+LOAD 1
+ADD 12, 0 ; Increase the position in memory
+ADD 14, 0 ; Increase our fibonacci number
+MOV 0, 15 ; Check if our fibonacci is 20
+JIH 
+RTS
+
+
+
 LOAD 9
 PUSH 0
 JSR 6 ; FIB
@@ -6,23 +28,23 @@ RTS
 
 POP 1 ; FIB case
 MOV 0, 1
-JIZ 32  ; ZERO
+JIZ 54  ; ZERO
 LOAD 1
 SUB 1, 0
 MOV 0, 1
-JIZ 36  ; ONE
+JIZ 58  ; ONE
 
 MOV 2, 1
 LOAD 1
 SUB 2, 0
 PUSH 2
 PUSH 1
-JSR 6 ; FIB
+JSR 28 ; FIB
 POP 8
 POP 9
 PUSH 8
 PUSH 9
-JSR 6 ; FIB
+JSR 28 ; FIB
 POP 7
 POP 6
 ADD 6, 7
