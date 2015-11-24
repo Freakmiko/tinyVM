@@ -38,5 +38,6 @@ private:
 	bool cntProg;
 
 	int shiftCounter;
+	std::string filePath;
 };
 

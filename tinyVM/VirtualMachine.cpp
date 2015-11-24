@@ -20,21 +20,25 @@ void VirtualMachine::start()
 {
 	do
 	{
+		profiler[programCounter]++;
 		run();
-        profiler[programCounter]++;
 	} while (cntProg);
 
-    // Profiler section
 	double sum = 0;
 	for (int i = 0; i < 4096; ++i) {
 		sum += profiler[i];
 	}
 
-	for (int i = 0; i < 4096; ++i) {
-		if(profiler[i] != 0) {
-			std::cout << "[" << i << "]: " << profiler[i] / sum * 100 << "%" << std::endl;
-		}
+	std::ifstream codeFile(this->filePath);
+	std::ofstream outputFile("output.txt");
+	std::string currentLine("");
+	int counter = 0;
+	while(!codeFile.eof()) {
+		std::getline(codeFile, currentLine);
+		outputFile << profiler[counter++] / sum * 100 << "%: " << currentLine << std::endl;
 	}
+	codeFile.close();
+	outputFile.close();
 }
 
 void VirtualMachine::run()
@@ -184,6 +188,7 @@ VirtualMachine::~VirtualMachine()
 
 void VirtualMachine::readProgram(const std::string& filePath)
 {
+	this->filePath = filePath;
 	std::ifstream program(filePath);
 	if (program.fail())
 	{
