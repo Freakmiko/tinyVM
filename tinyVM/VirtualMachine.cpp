@@ -61,110 +61,110 @@ void VirtualMachine::run()
 	switch (command)
 	{
 	case NOP:
-		std::cout << shiftString << "NOP command found" << std::endl;
+		// std::cout << shiftString << "NOP command found" << std::endl;
 		programCounter++;
 		break;
 	case LOAD:
-		std::cout << shiftString << "LOAD command found" << std::endl;
+		// std::cout << shiftString << "LOAD command found" << std::endl;
 		registers[0] = value;
-		std::cout << shiftString << "Register 0 loaded the value: " << value << std::endl;
+		// std::cout << shiftString << "Register 0 loaded the value: " << value << std::endl;
 		programCounter++;
 		break;
 	case MOV:
-		std::cout << shiftString << "MOV command found" << std::endl;
+		// std::cout << shiftString << "MOV command found" << std::endl;
 		if (fromMem == 0 && toMem == 0)
 		{
 			registers[idx] = registers[idy];
-			std::cout << shiftString << "Register[" << idx
-				<< "] now has the value from Register["
-				<< idy << "](" << registers[idy] << ")" << std::endl;
+			// std::cout << shiftString << "Register[" << idx
+//				<< "] now has the value from Register["
+//				<< idy << "](" << registers[idy] << ")" << std::endl;
 		}
 		else if (fromMem == 0 && toMem == 1)
 		{
 			memory[registers[idx]] = registers[idy];
-			std::cout << shiftString << "Memory[" << registers[idx]
-				<< "] now has the value from Register["
-				<< idy << "](" << registers[idy] << ")" << std::endl;
+			// std::cout << shiftString << "Memory[" << registers[idx]
+//				<< "] now has the value from Register["
+//				<< idy << "](" << registers[idy] << ")" << std::endl;
 		}
 		else if (fromMem == 1 && toMem == 0)
 		{
 			registers[idx] = memory[registers[idy]];
-			std::cout << shiftString << "Register[" << idx
-				<< "] now has the value from Memory["
-				<< registers[idy] << "](" << memory[registers[idy]] << ")" << std::endl;
+			// std::cout << shiftString << "Register[" << idx
+//				<< "] now has the value from Memory["
+//				<< registers[idy] << "](" << memory[registers[idy]] << ")" << std::endl;
 		}
 		else if (fromMem == 1 && toMem == 1)
 		{
 			memory[registers[idx]] = memory[registers[idy]];
-			std::cout << shiftString << "Memory[" << memory[registers[idx]]
-				<< "] now has the value from Memory["
-				<< registers[idy] << "](" << memory[registers[idy]] << ")" << std::endl;
+			// std::cout << shiftString << "Memory[" << memory[registers[idx]]
+//				<< "] now has the value from Memory["
+//				<< registers[idy] << "](" << memory[registers[idy]] << ")" << std::endl;
 		}
 		programCounter++;
 		break;
 	case ADD:
-		std::cout << shiftString << "ADD command found" << std::endl;
+		// std::cout << shiftString << "ADD command found" << std::endl;
 		registers[idx] += registers[idy];
-		std::cout << shiftString << "Register[" << idx << "] += Register[" << idy << "] (" << registers[idx] << ")" << std::endl;
+		// std::cout << shiftString << "Register[" << idx << "] += Register[" << idy << "] (" << registers[idx] << ")" << std::endl;
 		programCounter++;
 		break;
 	case SUB:
-		std::cout << shiftString << "SUB command found" << std::endl;
+		// std::cout << shiftString << "SUB command found" << std::endl;
 		registers[idx] -= registers[idy];
-		std::cout << shiftString << "Register[" << idx << "] -= Register[" << idy << "] (" << registers[idx] << ")" << std::endl;
+		// std::cout << shiftString << "Register[" << idx << "] -= Register[" << idy << "] (" << registers[idx] << ")" << std::endl;
 		programCounter++;
 		break;
 	case MUL:
-		std::cout << shiftString << "MUL command found" << std::endl;
+		// std::cout << shiftString << "MUL command found" << std::endl;
 		registers[idx] *= registers[idy];
-		std::cout << shiftString << "Register[" << idx << "] *= Register[" << idy << "] (" << registers[idx] << ")" << std::endl;
+		// std::cout << shiftString << "Register[" << idx << "] *= Register[" << idy << "] (" << registers[idx] << ")" << std::endl;
 		programCounter++;
 		break;
 	case DIV:
-		std::cout << shiftString << "DIV command found" << std::endl;
+		// std::cout << shiftString << "DIV command found" << std::endl;
 		registers[idx] /= registers[idy];
-		std::cout << shiftString << "Register[" << idx << "] /= Register[" << idy << "] (" << registers[idx] << ")" << std::endl;
+		// std::cout << shiftString << "Register[" << idx << "] /= Register[" << idy << "] (" << registers[idx] << ")" << std::endl;
 		programCounter++;
 		break;
 	case PUSH:
-		std::cout << shiftString << "PUSH command found" << std::endl;
+		// std::cout << shiftString << "PUSH command found" << std::endl;
 		registerStack.push(registers[idx]);
-		std::cout << shiftString << "Register[" << idx << "] pushed onto stack" << std::endl;
+		// std::cout << shiftString << "Register[" << idx << "] pushed onto stack" << std::endl;
 		programCounter++;
 		break;
 	case POP:
-		std::cout << shiftString << "POP command found" << std::endl;
+		// std::cout << shiftString << "POP command found" << std::endl;
 		registers[idx] = registerStack.top();
 		registerStack.pop();
-		std::cout << shiftString << "Popped top from stack into Register[" << idx << "](" << registers[idx] << ")" << std::endl;
+		// std::cout << shiftString << "Popped top from stack into Register[" << idx << "](" << registers[idx] << ")" << std::endl;
 		programCounter++;
 		break;
 	case JMP:
-		std::cout << shiftString << "JMP command found" << std::endl;
+		// std::cout << shiftString << "JMP command found" << std::endl;
 		programCounter = value;
 		break;
 	case JIZ:
-		std::cout << shiftString << "JIZ command found" << std::endl;
+		// std::cout << shiftString << "JIZ command found" << std::endl;
 		if (registers[0] == 0)
 			programCounter = value;
 		else
 			programCounter++;
 		break;
 	case JIH:
-		std::cout << shiftString << "JIH command found" << std::endl;
+		// std::cout << shiftString << "JIH command found" << std::endl;
 		if (registers[0] > 0)
 			programCounter = value;
 		else
 			programCounter++;
 		break;
 	case JSR:
-		std::cout << shiftString << "JSR command found" << std::endl;
+		// std::cout << shiftString << "JSR command found" << std::endl;
 		subroutineStack.push(++programCounter);
 		programCounter = value;
             shiftCounter++;
 		break;
 	case RTS:
-		std::cout << shiftString << "RTS command found" << std::endl;
+		// std::cout << shiftString << "RTS command found" << std::endl;
             shiftCounter--;
 		if (subroutineStack.empty()) {
 			cntProg = false;
@@ -176,10 +176,10 @@ void VirtualMachine::run()
 		}
 		break;
 	default:
-		std::cout << shiftString << "Invalid command!" << std::endl;
+		// std::cout << shiftString << "Invalid command!" << std::endl;
 		cntProg = false;
 	}
-	std::cout << shiftString << std::endl;
+	// std::cout << shiftString << std::endl;
 }
 
 VirtualMachine::~VirtualMachine()
@@ -192,7 +192,7 @@ void VirtualMachine::readProgram(const std::string& filePath)
 	std::ifstream program(filePath);
 	if (program.fail())
 	{
-		std::cout << "Could not open file!";
+		// std::cout << "Could not open file!";
 		exit(EXIT_FAILURE);
 	}
 
@@ -218,7 +218,7 @@ void VirtualMachine::readProgram(const std::string& filePath)
 		std::size_t found = currentLine.find(",(");
 		if (found != std::string::npos)
 		{
-			std::cout << "Found a (" << std::endl;
+			// std::cout << "Found a (" << std::endl;
 			currentLine.replace(found + 1, 1, "");
 			found = currentLine.find(")");
 			currentLine.replace(found, 1, "");
@@ -229,7 +229,7 @@ void VirtualMachine::readProgram(const std::string& filePath)
 		found = currentLine.find("(");
 		if (found != std::string::npos)
 		{
-			std::cout << "Found a (" << std::endl;
+			// std::cout << "Found a (" << std::endl;
 			currentLine.replace(found, 1, "");
 			found = currentLine.find(")");
 			currentLine.replace(found, 1, "");
@@ -239,7 +239,7 @@ void VirtualMachine::readProgram(const std::string& filePath)
 		std::string subString;
 		std::stringstream currLinStream(currentLine);
 		std::getline(currLinStream, subString, ' ');
-		std::cout << "Command: " << subString << std::endl;
+		// std::cout << "Command: " << subString << std::endl;
 
 		if (subString == "NOP" || subString.find_first_not_of(' ') == std::string::npos)
 		{
@@ -250,7 +250,7 @@ void VirtualMachine::readProgram(const std::string& filePath)
 		{
 			command = LOAD;
 			currLinStream >> value;
-			std::cout << "Value: " << value << std::endl;
+			// std::cout << "Value: " << value << std::endl;
 			command += (value << 4);
 			memory[programLine++] = command;
 		}
@@ -260,10 +260,10 @@ void VirtualMachine::readProgram(const std::string& filePath)
 
 			command += MOV;
 			currLinStream >> rx;
-			std::cout << "RX: " << rx << std::endl;
+			// std::cout << "RX: " << rx << std::endl;
 			currLinStream >> comma;
 			currLinStream >> ry;
-			std::cout << "RY: " << ry << std::endl;
+			// std::cout << "RY: " << ry << std::endl;
 			command += (rx << 4) + (ry << 8);
 			memory[programLine++] = command;
 		}
@@ -273,10 +273,10 @@ void VirtualMachine::readProgram(const std::string& filePath)
 
 			command = ADD;
 			currLinStream >> rx;
-			std::cout << "RX: " << rx << std::endl;
+			// std::cout << "RX: " << rx << std::endl;
 			currLinStream >> comma;
 			currLinStream >> ry;
-			std::cout << "RY: " << ry << std::endl;
+			// std::cout << "RY: " << ry << std::endl;
 			command += (rx << 4) + (ry << 8);
 			memory[programLine++] = command;
 		}
@@ -286,10 +286,10 @@ void VirtualMachine::readProgram(const std::string& filePath)
 
 			command = SUB;
 			currLinStream >> rx;
-			std::cout << "RX: " << rx << std::endl;
+			// std::cout << "RX: " << rx << std::endl;
 			currLinStream >> comma;
 			currLinStream >> ry;
-			std::cout << "RY: " << ry << std::endl;
+			// std::cout << "RY: " << ry << std::endl;
 			command += (rx << 4) + (ry << 8);
 			memory[programLine++] = command;
 		}
@@ -299,10 +299,10 @@ void VirtualMachine::readProgram(const std::string& filePath)
 
 			command = MUL;
 			currLinStream >> rx;
-			std::cout << "RX: " << rx << std::endl;
+			// std::cout << "RX: " << rx << std::endl;
 			currLinStream >> comma;
 			currLinStream >> ry;
-			std::cout << "RY: " << ry << std::endl;
+			// std::cout << "RY: " << ry << std::endl;
 			command += (rx << 4) + (ry << 8);
 			memory[programLine++] = command;
 		}
@@ -312,10 +312,10 @@ void VirtualMachine::readProgram(const std::string& filePath)
 
 			command = DIV;
 			currLinStream >> rx;
-			std::cout << "RX: " << rx << std::endl;
+			// std::cout << "RX: " << rx << std::endl;
 			currLinStream >> comma;
 			currLinStream >> ry;
-			std::cout << "RY: " << ry << std::endl;
+			// std::cout << "RY: " << ry << std::endl;
 			command += (rx << 4) + (ry << 8);
 			memory[programLine++] = command;
 		}
@@ -323,7 +323,7 @@ void VirtualMachine::readProgram(const std::string& filePath)
 		{
 			command = PUSH;
 			currLinStream >> rx;
-			std::cout << "RX: " << rx << std::endl;
+			// std::cout << "RX: " << rx << std::endl;
 			command += (rx << 4);
 			memory[programLine++] = command;
 		}
@@ -331,7 +331,7 @@ void VirtualMachine::readProgram(const std::string& filePath)
 		{
 			command = POP;
 			currLinStream >> rx;
-			std::cout << "RX: " << rx << std::endl;
+			// std::cout << "RX: " << rx << std::endl;
 			command += (rx << 4);
 			memory[programLine++] = command;
 		}
@@ -339,7 +339,7 @@ void VirtualMachine::readProgram(const std::string& filePath)
 		{
 			command = JMP;
 			currLinStream >> value;
-			std::cout << "Value: " << value << std::endl;
+			// std::cout << "Value: " << value << std::endl;
 			command += (value << 4);
 			memory[programLine++] = command;
 		}
@@ -347,7 +347,7 @@ void VirtualMachine::readProgram(const std::string& filePath)
 		{
 			command = JIZ;
 			currLinStream >> value;
-			std::cout << "Value: " << value << std::endl;
+			// std::cout << "Value: " << value << std::endl;
 			command += (value << 4);
 			memory[programLine++] = command;
 		}
@@ -355,7 +355,7 @@ void VirtualMachine::readProgram(const std::string& filePath)
 		{
 			command = JIH;
 			currLinStream >> value;
-			std::cout << "Value: " << value << std::endl;
+			// std::cout << "Value: " << value << std::endl;
 			command += (value << 4);
 			memory[programLine++] = command;
 		}
@@ -363,7 +363,7 @@ void VirtualMachine::readProgram(const std::string& filePath)
 		{
 			command = JSR;
 			currLinStream >> value;
-			std::cout << "Value: " << value << std::endl;
+			// std::cout << "Value: " << value << std::endl;
 			command += (value << 4);
 			memory[programLine++] = command;
 		}
